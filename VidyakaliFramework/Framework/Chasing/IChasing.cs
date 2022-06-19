@@ -8,11 +8,12 @@ using System.Drawing;
 using Framework.Movement;
 using Framework.Collision;
 using Framework.Core;
+using Framework.Chasing;
 
-namespace Framework.Movement
+namespace Framework.Chasing
 {
-    public interface IMovement
+    public interface IChasing
     {
-        Point move(Point location);
+        void performChasing(IGame game,GoPictureBox source1, GoPictureBox source2);
     }
 }

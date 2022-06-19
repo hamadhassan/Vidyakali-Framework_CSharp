@@ -8,11 +8,11 @@ using System.Drawing;
 using Framework.Movement;
 using Framework.Collision;
 using Framework.Core;
-
 namespace Framework.Movement
 {
-    public interface IMovement
+    public interface IFire
     {
-        Point move(Point location);
+        void riseFireCreateEvent(PictureBox pb);
+
     }
 }

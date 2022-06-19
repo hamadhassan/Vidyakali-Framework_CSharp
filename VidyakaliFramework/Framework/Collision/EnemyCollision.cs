@@ -11,24 +11,24 @@ using Framework.Core;
 
 namespace Framework.Collision
 {
-    public class PLayerCollision : ICollisionAction
+    public class EnemyCollision : ICollisionAction
     {
-        GoPictureBox player=null;
+        GoPictureBox enemy=null;
         public void removePictureBoxObject(IGame game, GoPictureBox source1, GoPictureBox source2)
         {
-            if (source1.Otype == ObjectType.player)
+            if (source1.Otype == ObjectType.enemyIdel || source1.Otype == ObjectType.enemyRun)
             {
-                player = source1;
+                enemy = source1;
             }
             else
             {
-                player = source2;
+                enemy = source2;
             }
-            game.risePlayerDieEvent(player.Pbx);
+            game.riseEnemyDieEvent(enemy.Pbx);
         }
-        public void removeProgressBarObject(IGame game, GoProgressBar player)
+        public void removeProgressBarObject(IGame game,GoProgressBar enemy)
         {
-            game.risePlayerProgressBarDieEvent(player.Pbar);
+            game.riseEnemyProgressBarDieEvent(enemy.Pbar);
         }
     }
 }

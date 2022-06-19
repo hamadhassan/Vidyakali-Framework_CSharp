@@ -42,13 +42,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chasing\ChasingClass.cs" />
+    <Compile Include="Chasing\IChasing.cs" />
+    <Compile Include="Chasing\SmartChasing.cs" />
+    <Compile Include="Collision\BoxCollision.cs" />
     <Compile Include="Collision\CollisionClass.cs" />
+    <Compile Include="Collision\EnemyCollision.cs" />
     <Compile Include="Collision\ICollisionAction.cs" />
     <Compile Include="Collision\PlayerCollision.cs" />
+    <Compile Include="Core\DirectionType.cs" />
     <Compile Include="Core\Game.cs" />
-    <Compile Include="Core\GameObject.cs" />
+    <Compile Include="Core\GoPictureBox.cs" />
+    <Compile Include="Core\GoProgressBar.cs" />
     <Compile Include="Core\IGame.cs" />
     <Compile Include="Core\ObjectType.cs" />
+    <Compile Include="GameScore\NextLevel.cs" />
+    <Compile Include="GameScore\Score.cs" />
+    <Compile Include="Movement\Fire.cs" />
+    <Compile Include="Movement\Horizontal.cs" />
+    <Compile Include="Movement\IFire.cs" />
     <Compile Include="Movement\IMovement.cs" />
     <Compile Include="Movement\Keyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

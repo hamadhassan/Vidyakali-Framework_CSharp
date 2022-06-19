@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Framework.Core
 {
-    public class GameObject
+    public enum DirectionType
     {
+        left, right, up, down
     }
 }

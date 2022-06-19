@@ -1,0 +1,6 @@
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\bin\Debug\Framework.dll
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\bin\Debug\Framework.pdb
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\obj\Debug\Framework.csproj.AssemblyReference.cache
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\obj\Debug\Framework.csproj.CoreCompileInputs.cache
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\obj\Debug\Framework.dll
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Framework\obj\Debug\Framework.pdb
