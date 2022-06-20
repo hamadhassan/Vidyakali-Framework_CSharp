@@ -8,6 +8,7 @@ using System.Drawing;
 using Framework.Movement;
 using Framework.Collision;
 using Framework.Core;
+using Framework.Firing;
 
 namespace Framework.Core
 {
@@ -17,6 +18,5 @@ namespace Framework.Core
         void riseEnemyDieEvent(PictureBox pb);
         void risePlayerProgressBarDieEvent(ProgressBar pbar);
         void riseEnemyProgressBarDieEvent(ProgressBar pbar);
-        void riseFireCreateEvent(PictureBox pb);
     }
 }

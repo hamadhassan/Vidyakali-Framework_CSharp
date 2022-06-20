@@ -10,6 +10,7 @@ using Framework.Collision;
 using Framework.Core;
 using Framework.Chasing;
 using Framework.GameScore;
+using Framework.Firing;
 
 namespace Framework.Core
 {
@@ -19,14 +20,17 @@ namespace Framework.Core
         int reducePlayerHealth;
         int reduceEnemyHealth;
         Keys keyCodeValue;
+        Keys fireKeyCode;
         float scoreIncrementValue;
         ProgressBar life;
         bool gameStatus;
         string nextLevelStatus=NextLevel.level1.ToString();
+        private int enemyDieCount;
 
         List<GoPictureBox> goPictureBoxList;
         List<GoProgressBar> goProgressBarList;
         List<CollisionClass> collisionList;
+        List<GoFirePictureBox> goFirePictureBoxeList;
 
         List<ObjectType> objectTypeList;
         List<ChasingClass> chasingList;
@@ -40,6 +44,7 @@ namespace Framework.Core
 
         GoPictureBox goPictureBox;
         GoProgressBar goProgressBar;
+        GoFirePictureBox goFirePictureBox;
 
         private int pBarOffsetLeft;
         private int pBarOffsetTop;
@@ -47,6 +52,7 @@ namespace Framework.Core
         public List<GoPictureBox> GoPictureBoxList { get => goPictureBoxList; set => goPictureBoxList = value; }
         public List<GoProgressBar> GoProgressBarList { get => goProgressBarList; set => goProgressBarList = value; }
         public List<CollisionClass> CollisionList { get => collisionList; set => collisionList = value; }
+        public List<GoFirePictureBox> GoFirePictureBoxeList { get => goFirePictureBoxeList; set => goFirePictureBoxeList = value; }
 
         public Game(int gravity,int reducePlayerHealth,int reduceEnemyHealth,float scoreIncrementValue,bool gameStatus)
         {
@@ -61,12 +67,9 @@ namespace Framework.Core
             goProgressBarList = new List<GoProgressBar>();
             objectTypeList = new List<ObjectType>();
             chasingList = new List<ChasingClass>();
+            goFirePictureBoxeList = new List<GoFirePictureBox>();
         }
         #region Events
-        public void riseFireCreateEvent(PictureBox box)
-        {
-
-        }
         public void risePlayerDieEvent(PictureBox playerGameObject)
         {
             OnPictureBoxRemoved?.Invoke(playerGameObject, EventArgs.Empty);
@@ -104,9 +107,21 @@ namespace Framework.Core
             goProgressBarList.Add(goProgressBar);
             onProgressBarAdded?.Invoke(goProgressBar.Pbar, EventArgs.Empty);
         }
-        public void removeAllObjects()
+        private int playerLeft;
+        private int playerTop;
+        public void addGameObjectPictureBoxFire(Image img, string direction, int speed, ObjectType fireFrom,int offsetLeft, int offsetTop)
         {
-           
+            for (int i = 0; i < goPictureBoxList.Count; i++)
+            {
+                if (goPictureBoxList[i].Otype == fireFrom)
+                {
+                    playerLeft = goPictureBoxList[i].Pbx.Left;
+                    playerTop = goPictureBoxList[i].Pbx.Top;
+                }
+            }
+            goFirePictureBox = new GoFirePictureBox(img, direction, speed, playerLeft+offsetLeft, playerTop+offsetTop);
+            goFirePictureBoxeList.Add(goFirePictureBox);
+            OnPictureBoxAdded?.Invoke(goFirePictureBox.Pbx, EventArgs.Empty);
         }
         #endregion
 
@@ -122,6 +137,9 @@ namespace Framework.Core
                 detectCollsionwithEnemy();
                 detectCollisionOfEnergyPoint();
                 removeEnergyPoint();
+                detectPlayerFirCollisionwithEnemy();
+
+
                 foreach (GoPictureBox go in goPictureBoxList)
                 {
                     if(go != null)
@@ -153,6 +171,14 @@ namespace Framework.Core
                         }
                     }
                 }
+                foreach (GoFirePictureBox go in goFirePictureBoxeList)
+                {
+                    if (go != null)
+                    {
+                        go.keyPressedByUserForFire();
+                    }
+                }
+
             }
             return nextLevelStatus;
 
@@ -160,26 +186,7 @@ namespace Framework.Core
         #endregion
 
         #region Movement
-        public void keyPressedForFire(Keys keycode)
-        {
-            foreach (GoPictureBox go in goPictureBoxList)
-            {
-                if (go != null)
-                {
-                    if (go.Movement != null)
-                    {
-                        if (go.Otype == ObjectType.bullet)
-                        {
-                            if (go.Movement.GetType() == typeof(Fire))
-                            {
-                                Fire keyboardHandler = (Fire)go.Movement;
-                                keyboardHandler.keyPressedByUserForFire(keycode,go.Pbx);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+       
         public void keyPressed(Keys keyCode, Image idel, Image moveLeft, Image moveRigth)
         {
             keyCodeValue = keyCode;
@@ -326,6 +333,33 @@ namespace Framework.Core
         public void addCollsionIntoList(CollisionClass c)
         {
             collisionList.Add(c);
+        }
+        #endregion
+
+        #region FireCollision
+        private void detectPlayerFirCollisionwithEnemy()
+        {
+            foreach(GoProgressBar health in goProgressBarList)
+            {
+                foreach (GoPictureBox enemy in goPictureBoxList)
+                {
+                    foreach (GoFirePictureBox bullet in goFirePictureBoxeList)
+                    {
+                        if (enemy.Otype == ObjectType.enemyIdel || enemy.Otype == ObjectType.enemyRun)
+                        {
+                            if (bullet.Pbx.Bounds.IntersectsWith(enemy.Pbx.Bounds))
+                            {
+                                enemy.Pbx.Visible = false;
+                                health.Pbar.Visible = false;
+                               // bullet.Pbx.Visible = false;
+                                Score.updateScore(scoreIncrementValue);
+                                enemyDieCount++;
+                            }
+                        }
+
+                    }
+                }
+            }
         }
         #endregion
 

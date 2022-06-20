@@ -52,20 +52,19 @@
     <Compile Include="Collision\PlayerCollision.cs" />
     <Compile Include="Core\DirectionType.cs" />
     <Compile Include="Core\Game.cs" />
+    <Compile Include="Core\GoFirePictureBox.cs" />
     <Compile Include="Core\GoPictureBox.cs" />
     <Compile Include="Core\GoProgressBar.cs" />
     <Compile Include="Core\IGame.cs" />
     <Compile Include="Core\ObjectType.cs" />
+    <Compile Include="Firing\IFire.cs" />
     <Compile Include="GameScore\NextLevel.cs" />
     <Compile Include="GameScore\Score.cs" />
-    <Compile Include="Movement\Fire.cs" />
     <Compile Include="Movement\Horizontal.cs" />
-    <Compile Include="Movement\IFire.cs" />
     <Compile Include="Movement\IMovement.cs" />
     <Compile Include="Movement\Keyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
