@@ -46,22 +46,6 @@ namespace Framework.Core
             {
                 pbx.Top += speed;
             }
-            //if (keyCode == Keys.A && direction == "left")
-            //{
-            //    Pbx.Left -= speed;
-            //}
-            //else if (keyCode == Keys.D && direction == "right")
-            //{
-            //    pbx.Left += speed;
-            //}
-            //else if (keyCode == Keys.W)
-            //{
-            //    pbx.Top -= speed;
-            //}
-            //else if (keyCode == Keys.S)
-            //{
-            //    pbx.Top += speed;
-            //}
         }
     }
 }

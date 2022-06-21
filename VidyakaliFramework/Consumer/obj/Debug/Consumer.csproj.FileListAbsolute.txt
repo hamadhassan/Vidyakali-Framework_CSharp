@@ -12,3 +12,4 @@ D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\Vidy
 D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Consumer\obj\Debug\Consumer.csproj.CopyComplete
 D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Consumer\obj\Debug\Consumer.exe
 D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Consumer\obj\Debug\Consumer.pdb
+D:\COMPUTER SCIENCE\PD\GitHub Local Repositories\Vidyakali-FrameWork_CSharp\VidyakaliFramework\Consumer\obj\Debug\Consumer.frmEnd.resources

@@ -15,23 +15,24 @@ namespace Framework.Core
 {
     public class Game : IGame
     {
-        int gravity;
-        int c;
-        int reduceEnemyHealth;
-        Keys keyCodeValue;
-        float scoreIncrementValue;
-        ProgressBar life;
-        bool gameStatus;
-        string nextLevelStatus=NextLevel.level1.ToString();
+        #region Data Set and Load Event 
+        private int gravity;
+        private int reducePlayerHealth;
+        private int reduceEnemyHealth;
+        private Keys keyCodeValue;
+        private float scoreIncrementValue;
+        private ProgressBar life;
+        private bool gameStatus;
+        private string nextLevelStatus=NextLevel.level1.ToString();
         private int enemyDieCount;
 
-        List<GoPictureBox> goPictureBoxList;
-        List<GoProgressBar> goProgressBarList;
-        List<CollisionClass> collisionList;
-        List<GoFirePictureBox> goFirePictureBoxeList;
+        private List<GoPictureBox> goPictureBoxList;
+        private List<GoProgressBar> goProgressBarList;
+        private List<CollisionClass> collisionList;
+        private List<GoFirePictureBox> goFirePictureBoxeList;
 
-        List<ObjectType> objectTypeList;
-        List<ChasingClass> chasingList;
+        private List<ObjectType> objectTypeList;
+        private List<ChasingClass> chasingList;
 
         public event EventHandler OnPictureBoxAdded;
         public event EventHandler onProgressBarAdded;
@@ -40,12 +41,17 @@ namespace Framework.Core
         
 
 
-        GoPictureBox goPictureBox;
-        GoProgressBar goProgressBar;
-        GoFirePictureBox goFirePictureBox;
+        private GoPictureBox goPictureBox;
+        private GoProgressBar goProgressBar;
+        private GoFirePictureBox goFirePictureBox;
 
         private int pBarOffsetLeft;
         private int pBarOffsetTop;
+
+        private int playerLeft;
+        private int playerTop;
+
+        private int wonAt;
 
         public List<GoPictureBox> GoPictureBoxList { get => goPictureBoxList; set => goPictureBoxList = value; }
         public List<GoProgressBar> GoProgressBarList { get => goProgressBarList; set => goProgressBarList = value; }
@@ -55,7 +61,7 @@ namespace Framework.Core
         public Game(int gravity,int reducePlayerHealth,int reduceEnemyHealth,float scoreIncrementValue,bool gameStatus)
         {
             this.gravity = gravity;
-            this.c = reducePlayerHealth;
+            this.reducePlayerHealth = reducePlayerHealth;
             this.reduceEnemyHealth = reduceEnemyHealth;
             this.scoreIncrementValue = scoreIncrementValue;
             this.gameStatus = gameStatus;
@@ -67,6 +73,8 @@ namespace Framework.Core
             chasingList = new List<ChasingClass>();
             goFirePictureBoxeList = new List<GoFirePictureBox>();
         }
+        #endregion
+
         #region Events
         public void risePlayerDieEvent(PictureBox playerGameObject)
         {
@@ -105,8 +113,6 @@ namespace Framework.Core
             goProgressBarList.Add(goProgressBar);
             onProgressBarAdded?.Invoke(goProgressBar.Pbar, EventArgs.Empty);
         }
-        private int playerLeft;
-        private int playerTop;
         public void addGameObjectPictureBoxFire(Image img, string direction, int speed, ObjectType fireFrom,int offsetLeft, int offsetTop)
         {
             for (int i = 0; i < goPictureBoxList.Count; i++)
@@ -124,10 +130,11 @@ namespace Framework.Core
         #endregion
 
         #region Update Game by tick event 
-        public string update(Label score,ProgressBar life)
+        public string update(Label score,ProgressBar life,int wonAt)
         {
             if (gameStatus == true)
             {
+                this.wonAt = wonAt;
                 score.Text = Score.GamePoint.ToString();
                 this.life = life;
                 moveSmartly();
@@ -136,8 +143,9 @@ namespace Framework.Core
                 detectCollisionOfEnergyPoint();
                 removeEnergyPoint();
                 detectPlayerFirCollisionwithEnemy();
-
-
+                removeEnemy();
+                removeEnemyHealth();
+                removeBullet();
                 foreach (GoPictureBox go in goPictureBoxList)
                 {
                     if(go != null)
@@ -176,6 +184,7 @@ namespace Framework.Core
                         go.fire();
                     }
                 }
+               
 
             }
             return nextLevelStatus;
@@ -258,7 +267,7 @@ namespace Framework.Core
                                             {
                                                 if (goProgressBarList[z].Pbar.Value > 0)
                                                 {
-                                                    goProgressBarList[z].Pbar.Value -= this.c;
+                                                    goProgressBarList[z].Pbar.Value -=reducePlayerHealth;
                                                     if (goProgressBarList[z].Pbar.Value <= 2)
                                                     {
                                                         life.Value -= 20;
@@ -334,7 +343,7 @@ namespace Framework.Core
         }
         #endregion
 
-        #region FireCollision
+        #region Firing
         private void detectPlayerFirCollisionwithEnemy()
         {
             foreach(GoProgressBar health in goProgressBarList)
@@ -349,14 +358,66 @@ namespace Framework.Core
                             {
                                 enemy.Pbx.Visible = false;
                                 health.Pbar.Visible = false;
-                               // bullet.Pbx.Visible = false;
                                 Score.updateScore(scoreIncrementValue);
                                 enemyDieCount++;
+                                if (wonAt == enemyDieCount)
+                                {
+                                    nextLevelStatus = NextLevel.level3.ToString();
+                                    gameStatus = false;
+                                }
+
                             }
                         }
 
                     }
                 }
+            }
+        }
+        private void removeEnemy()
+        {
+            foreach (GoPictureBox enemy in goPictureBoxList)
+            {
+                if (enemy.Pbx.Visible == false)
+                {
+                    OnPictureBoxRemoved?.Invoke(enemy.Pbx, EventArgs.Empty);
+                }
+            }
+        }
+        private void removeEnemyHealth()
+        {
+            foreach (GoProgressBar health in goProgressBarList)
+            {
+                if (health.Pbar.Visible == false)
+                {
+                    onProgressBarRemoved?.Invoke(health.Pbar, EventArgs.Empty);
+                }
+            }
+        }
+        private void removeBullet()
+        {
+            for (int i = 0; i < goFirePictureBoxeList.Count; i++)
+            {
+                if (goFirePictureBoxeList[i].Pbx.Right <= 0)
+                {//right
+                    OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
+                    GoFirePictureBoxeList.RemoveAt(i);
+                }
+                else if (goFirePictureBoxeList[i].Pbx.Left <= 0)
+                {//left
+                    OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
+                    GoFirePictureBoxeList.RemoveAt(i);
+                }
+                else if (goFirePictureBoxeList[i].Pbx.Top <= 0)
+                {//up
+                    OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
+                    GoFirePictureBoxeList.RemoveAt(i);
+                }
+                else if (goFirePictureBoxeList[i].Pbx.Bottom <= 0)
+                {//down
+                    OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
+                    GoFirePictureBoxeList.RemoveAt(i);
+                }
+
             }
         }
         #endregion
