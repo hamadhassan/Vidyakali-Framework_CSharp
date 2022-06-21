@@ -27,20 +27,19 @@ namespace Framework.Movement
         {
             if (location.X <= 0)
             {
-                direction = "right";
+                direction = DirectionType.right.ToString();
             }
             else if (location.X + offset >= formBoundary.X)
             {
-                direction = "left";
+                direction = DirectionType.left.ToString();
             }
-            if (direction == "left")
+            if (direction == DirectionType.left.ToString())
             {
                 location.X -= speed;
             }
-            if (direction == "right")
+            if (direction == DirectionType.right.ToString())
             {
                 location.X += speed;
-
             }
             return location;
         }

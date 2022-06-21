@@ -62,6 +62,7 @@ namespace Consumer
                                 if (isLevel2 == true)
                                 {
                                     clearAllObjects();
+                                    removeEnergyPoint();
                                     nextLevelBox.Visible = false;
                                     isLevel3 = true;
                                     level3();
@@ -94,6 +95,7 @@ namespace Consumer
                                 if(isLevel1==true)
                                 {
                                     clearAllObjects();
+                                    removeEnergyPoint();
                                     nextLevelBox.Visible = false;
                                     isLevel2 = true;
                                     level2();
@@ -141,7 +143,6 @@ namespace Consumer
             {
                 if (isLevel1==true)
                 {
-
                     nextLevelBox.Visible = true;
                     detectCollsionwithBoxL1();
                 }
@@ -163,42 +164,18 @@ namespace Consumer
             }
             if (isLevel3 == true)
             {
-                firTime++;
-                if (firTime == firFixTime)
-                {
-                    if (keyPressed == Keys.A)
-                    {
-                        game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerRight, "left", 10, ObjectType.player, -20, 40);
-                        keyPressed = Keys.None;
-                    }
-                    if (keyPressed == Keys.D)
-                    {
-                        game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerLeft, "right", 10, ObjectType.player, 0, 40);
-                        keyPressed = Keys.None;
-                    }
-                    if (keyPressed == Keys.W)
-                    {
-                        game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerUp, "up", 10, ObjectType.player, 10, -40);
-                        keyPressed = Keys.None;
-                    }
-                    if (keyPressed == Keys.S)
-                    {
-                        game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerDown, "down", 10, ObjectType.player, 10, 40);
-                        keyPressed = Keys.None;
-                    }
-                    // clearDieObject();
-                    firTime = 0;
-                }
-                level3InLoop();
-                //isLevel3 = false;
-                if (5 == random.Next(1, 5))
+                if (2 == random.Next(1, 2))
                 {
                     level3Objects();
                 }
+                firTime++;
+                level3InLoop();
+                //isLevel3 = false;
             }
             
         }
         #endregion
+
         #region EnergyPoint
         private void showEnergyPoint()
         {
@@ -220,6 +197,17 @@ namespace Consumer
             }
 
         }
+        private void removeEnergyPoint()
+        {
+            for(int i = 0; i < game.GoPictureBoxList.Count; i++)
+            {
+                if (game.GoPictureBoxList[i].Otype == ObjectType.energy)
+                {
+                    this.Controls.Remove((game.GoPictureBoxList[i].Pbx));
+                    game.GoPictureBoxList.RemoveAt(i);
+                }
+            }
+        }
         #endregion
 
         #region Remove All Object
@@ -227,74 +215,20 @@ namespace Consumer
         {
             for (int i = 0; i < game.GoPictureBoxList.Count; i++)
             {
-                this.Controls.RemoveAt(i);
-                game.GoPictureBoxList[i] = null;
+                if (game.GoPictureBoxList[i].Otype== ObjectType.player|| game.GoPictureBoxList[i].Otype == ObjectType.enemyIdel || game.GoPictureBoxList[i].Otype == ObjectType.enemyRun)
+                {
+                    this.Controls.Remove((game.GoPictureBoxList[i].Pbx));
+                    game.GoPictureBoxList.RemoveAt(i);
+                }
+              
             }
             for (int i = 0; i < game.GoProgressBarList.Count; i++)
             {
-                this.Controls.RemoveAt(i);
-                game.GoProgressBarList[i] = null;
-            }
-            for (int i = 0; i < game.CollisionList.Count; i++)
-            {
-                game.CollisionList[i] = null;
-            }
-        }
-        public void clearDieObject()
-        {
-            for(int i = 0; i < game.GoPictureBoxList.Count; i++)
-            {
-                for(int j=0;j<game.GoProgressBarList.Count; j++)
+                if (game.GoProgressBarList[i].Otype == ObjectType.player || game.GoProgressBarList[i].Otype == ObjectType.enemyIdel || game.GoProgressBarList[i].Otype == ObjectType.enemyRun)
                 {
-                    for (int k = 0; k < game.GoFirePictureBoxeList.Count; k++)
-                    {
-                        if (game.GoPictureBoxList[i]!=null && game.GoProgressBarList[i]!=null&& game.GoFirePictureBoxeList[i] != null)
-                        {
-                            if(game.GoPictureBoxList[j].Pbx.Visible == false)
-                            {
-                                this.Controls.Remove(game.GoPictureBoxList[i].Pbx);
-                                game.GoPictureBoxList[i] = null;
-                            }
-                            if (game.GoProgressBarList[j].Pbar.Visible == false)
-                            {
-                                this.Controls.Remove(game.GoProgressBarList[i].Pbar);
-                                game.GoProgressBarList[j] = null;
-                            }
-                            if (game.GoFirePictureBoxeList[k].Pbx.Visible == false)
-                            {
-                                this.Controls.Remove(game.GoFirePictureBoxeList[k].Pbx);
-                                game.GoFirePictureBoxeList[k] = null;
-                            }
-                        }
-                    }
+                    this.Controls.Remove((game.GoProgressBarList[i].Pbar));
+                    game.GoProgressBarList.RemoveAt(i);
                 }
-            }
-            for(int i=0;i< game.GoFirePictureBoxeList.Count; i++)
-            {
-                if (game.GoFirePictureBoxeList[i] != null)
-                {
-                     if (game.GoFirePictureBoxeList[i].Pbx.Left >= this.Width)
-                    {
-                        this.Controls.Remove(game.GoFirePictureBoxeList[i].Pbx);
-                        game.GoFirePictureBoxeList[i] = null;
-                    }
-                    else if (game.GoFirePictureBoxeList[i].Pbx.Left <= -25)
-                    {
-                        this.Controls.Remove(game.GoFirePictureBoxeList[i].Pbx);
-                        game.GoFirePictureBoxeList[i] = null;
-                    }
-                    else if (game.GoFirePictureBoxeList[i].Pbx.Top <= 0)
-                    {
-                        this.Controls.Remove(game.GoFirePictureBoxeList[i].Pbx);
-                        game.GoFirePictureBoxeList[i] = null;
-                    }
-                    else if (game.GoFirePictureBoxeList[i].Pbx.Top <= this.Width)
-                    {
-                        this.Controls.Remove(game.GoFirePictureBoxeList[i].Pbx);
-                        game.GoFirePictureBoxeList[i] = null;
-                    }
-                }
-               
             }
         }
         #endregion
@@ -381,11 +315,35 @@ namespace Consumer
             Point boundary = new Point(this.Width - 75, this.Height);
             ///Adding game object Picture Box
             game.addGameObjectPictureBox(ObjectType.player, Consumer.Properties.Resources.idle, random.Next(100, 300), random.Next(100, 400), new Keyboard(20, boundary, 100));
-            level3Objects();
+            game.addGameObjectProgressBar(ObjectType.player, 100, 40, 15, 0, 80);
         }
         public void level3InLoop()
         {
-          
+            if (firTime == firFixTime)
+            {
+                if (keyPressed == Keys.A)
+                {
+                    game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerRight, "left", 10, ObjectType.player, -20, 40);
+                    keyPressed = Keys.None;
+                }
+                if (keyPressed == Keys.D)
+                {
+                    game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerLeft, "right", 10, ObjectType.player, 0, 40);
+                    keyPressed = Keys.None;
+                }
+                if (keyPressed == Keys.W)
+                {
+                    game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerUp, "up", 10, ObjectType.player, 10, -40);
+                    keyPressed = Keys.None;
+                }
+                if (keyPressed == Keys.S)
+                {
+                    game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerDown, "down", 10, ObjectType.player, 10, 40);
+                    keyPressed = Keys.None;
+                }
+                // clearDieObject();
+                firTime = 0;
+            }
         }
         private void level3Objects()
         {
@@ -397,7 +355,7 @@ namespace Consumer
             game.addGameObjectPictureBox(ObjectType.enemyIdel, Consumer.Properties.Resources.enemyIdel, random.Next(100, 300), random.Next(100, 400), new Horizontal(0, boundary, "right", 100));
             game.addGameObjectPictureBox(ObjectType.enemyRun, Consumer.Properties.Resources.enemyRunLeft, random.Next(100, 300), random.Next(100, 400), new Horizontal(0, boundary, "right", 100));
             ////Adding game object Progress Bar
-            game.addGameObjectProgressBar(ObjectType.player, 100, 40, 15, 0, 80);
+           
             game.addGameObjectProgressBar(ObjectType.enemyIdel, 100, 40, 15, 0, 80);
             game.addGameObjectProgressBar(ObjectType.enemyRun, 100, 40, 15, 0, 80);
             ////Chasing The player

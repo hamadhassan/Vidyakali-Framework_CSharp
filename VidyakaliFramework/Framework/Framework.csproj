@@ -57,7 +57,6 @@
     <Compile Include="Core\GoProgressBar.cs" />
     <Compile Include="Core\IGame.cs" />
     <Compile Include="Core\ObjectType.cs" />
-    <Compile Include="Firing\IFire.cs" />
     <Compile Include="GameScore\NextLevel.cs" />
     <Compile Include="GameScore\Score.cs" />
     <Compile Include="Movement\Horizontal.cs" />

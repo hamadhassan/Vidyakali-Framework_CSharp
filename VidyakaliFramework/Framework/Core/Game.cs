@@ -10,17 +10,15 @@ using Framework.Collision;
 using Framework.Core;
 using Framework.Chasing;
 using Framework.GameScore;
-using Framework.Firing;
 
 namespace Framework.Core
 {
     public class Game : IGame
     {
         int gravity;
-        int reducePlayerHealth;
+        int c;
         int reduceEnemyHealth;
         Keys keyCodeValue;
-        Keys fireKeyCode;
         float scoreIncrementValue;
         ProgressBar life;
         bool gameStatus;
@@ -57,7 +55,7 @@ namespace Framework.Core
         public Game(int gravity,int reducePlayerHealth,int reduceEnemyHealth,float scoreIncrementValue,bool gameStatus)
         {
             this.gravity = gravity;
-            this.reducePlayerHealth = reducePlayerHealth;
+            this.c = reducePlayerHealth;
             this.reduceEnemyHealth = reduceEnemyHealth;
             this.scoreIncrementValue = scoreIncrementValue;
             this.gameStatus = gameStatus;
@@ -157,16 +155,16 @@ namespace Framework.Core
                     {
                         for (int k = 0; k < objectTypeList.Count; k++)
                         {
-                            if (goPictureBoxList[j]!=null && goPictureBoxList[i] != null)
+                            if (goPictureBoxList[j] != null && goPictureBoxList[i] != null)
                             {
-                                //if(goPictureBoxList[i].Movement != null)
-                                //{
+                                if (goPictureBoxList[i].Movement != null)
+                                {
                                     if (goPictureBoxList[i].Otype == goProgressBarList[j].Otype && objectTypeList[k] == goProgressBarList[j].Otype)
                                     {
                                         goPictureBoxList[i].updateLocation(this.gravity);
                                         goProgressBarList[j].updateLocation(goPictureBoxList[i].Pbx.Location.X + pBarOffsetLeft, goPictureBoxList[i].Pbx.Location.Y + pBarOffsetTop);
                                     }
-                                //}
+                                }
                             }
                         }
                     }
@@ -175,7 +173,7 @@ namespace Framework.Core
                 {
                     if (go != null)
                     {
-                        go.keyPressedByUserForFire();
+                        go.fire();
                     }
                 }
 
@@ -260,7 +258,7 @@ namespace Framework.Core
                                             {
                                                 if (goProgressBarList[z].Pbar.Value > 0)
                                                 {
-                                                    goProgressBarList[z].Pbar.Value -= reducePlayerHealth;
+                                                    goProgressBarList[z].Pbar.Value -= this.c;
                                                     if (goProgressBarList[z].Pbar.Value <= 2)
                                                     {
                                                         life.Value -= 20;

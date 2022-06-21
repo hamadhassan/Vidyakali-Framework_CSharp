@@ -8,7 +8,6 @@ using System.Drawing;
 using Framework.Movement;
 using Framework.Collision;
 using Framework.Core;
-using Framework.Firing;
 namespace Framework.Core
 {
     public class GoFirePictureBox
@@ -29,7 +28,7 @@ namespace Framework.Core
         }
 
         public PictureBox Pbx { get => pbx; set => pbx = value; }
-        public void keyPressedByUserForFire()
+        public void fire()
         {
             if (direction == "left")
             {

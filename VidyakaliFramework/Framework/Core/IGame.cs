@@ -8,7 +8,6 @@ using System.Drawing;
 using Framework.Movement;
 using Framework.Collision;
 using Framework.Core;
-using Framework.Firing;
 
 namespace Framework.Core
 {
