@@ -66,12 +66,12 @@ namespace Framework.Core
             this.scoreIncrementValue = scoreIncrementValue;
             this.gameStatus = gameStatus;
 
-            goPictureBoxList = new List<GoPictureBox>();
-            collisionList = new List<CollisionClass>();
-            goProgressBarList = new List<GoProgressBar>();
+            GoPictureBoxList = new List<GoPictureBox>();
+            CollisionList = new List<CollisionClass>();
+            GoProgressBarList = new List<GoProgressBar>();
             objectTypeList = new List<ObjectType>();
             chasingList = new List<ChasingClass>();
-            goFirePictureBoxeList = new List<GoFirePictureBox>();
+            GoFirePictureBoxeList = new List<GoFirePictureBox>();
         }
         #endregion
 
@@ -95,13 +95,13 @@ namespace Framework.Core
         public void addGameObjectPictureBox(ObjectType otype, Image img, int left, int top, IMovement movement)
         {
             goPictureBox = new GoPictureBox(otype, img, left, top, movement);
-            goPictureBoxList.Add(goPictureBox);
+            GoPictureBoxList.Add(goPictureBox);
             OnPictureBoxAdded?.Invoke(goPictureBox.Pbx, EventArgs.Empty);
         }
         public void addGameObjectPictureBoxWithoutMovement(ObjectType otype, Image img, int left, int top)
         {
             goPictureBox = new GoPictureBox(otype, img, left, top);
-            goPictureBoxList.Add(goPictureBox);
+            GoPictureBoxList.Add(goPictureBox);
             OnPictureBoxAdded?.Invoke(goPictureBox.Pbx, EventArgs.Empty);
         }
         public void addGameObjectProgressBar(ObjectType otype, int value, int leftSize, int topSize, int offsetLeft, int offsetTop)
@@ -110,21 +110,21 @@ namespace Framework.Core
             pBarOffsetLeft = offsetLeft;
             pBarOffsetTop = offsetTop;
             objectTypeList.Add(otype);
-            goProgressBarList.Add(goProgressBar);
+            GoProgressBarList.Add(goProgressBar);
             onProgressBarAdded?.Invoke(goProgressBar.Pbar, EventArgs.Empty);
         }
         public void addGameObjectPictureBoxFire(Image img, string direction, int speed, ObjectType fireFrom,int offsetLeft, int offsetTop)
         {
-            for (int i = 0; i < goPictureBoxList.Count; i++)
+            for (int i = 0; i < GoPictureBoxList.Count; i++)
             {
-                if (goPictureBoxList[i].Otype == fireFrom)
+                if (GoPictureBoxList[i].Otype == fireFrom)
                 {
-                    playerLeft = goPictureBoxList[i].Pbx.Left;
-                    playerTop = goPictureBoxList[i].Pbx.Top;
+                    playerLeft = GoPictureBoxList[i].Pbx.Left;
+                    playerTop = GoPictureBoxList[i].Pbx.Top;
                 }
             }
             goFirePictureBox = new GoFirePictureBox(img, direction, speed, playerLeft+offsetLeft, playerTop+offsetTop);
-            goFirePictureBoxeList.Add(goFirePictureBox);
+            GoFirePictureBoxeList.Add(goFirePictureBox);
             OnPictureBoxAdded?.Invoke(goFirePictureBox.Pbx, EventArgs.Empty);
         }
         #endregion
@@ -146,7 +146,8 @@ namespace Framework.Core
                 removeEnemy();
                 removeEnemyHealth();
                 removeBullet();
-                foreach (GoPictureBox go in goPictureBoxList)
+                removeObjects();
+                foreach (GoPictureBox go in GoPictureBoxList)
                 {
                     if(go != null)
                     {
@@ -156,7 +157,6 @@ namespace Framework.Core
                         }
                     }
                 }
-
                 for (int i = 0; i < goPictureBoxList.Count; i++)
                 {//only move the progress bar 
                     for (int j = 0; j < goProgressBarList.Count; j++)
@@ -177,7 +177,7 @@ namespace Framework.Core
                         }
                     }
                 }
-                foreach (GoFirePictureBox go in goFirePictureBoxeList)
+                foreach (GoFirePictureBox go in GoFirePictureBoxeList)
                 {
                     if (go != null)
                     {
@@ -197,7 +197,7 @@ namespace Framework.Core
         public void keyPressed(Keys keyCode, Image idel, Image moveLeft, Image moveRigth)
         {
             keyCodeValue = keyCode;
-            foreach (GoPictureBox go in goPictureBoxList)
+            foreach (GoPictureBox go in GoPictureBoxList)
             {
                 if (go != null)
                 {
@@ -209,31 +209,6 @@ namespace Framework.Core
                             {
                                 Keyboard keyboardHandler = (Keyboard)go.Movement;
                                 keyboardHandler.keyPressedByUser(keyCode);
-                                //if (keyCode != Keys.Left && keyCode != Keys.Right)
-                                //{
-                                //    if (ObjectType.player == go.Otype)
-                                //    {
-                                //        goPictureBox.updateImage(idel);
-                                //    }
-                                //}
-                                //if (keyCode == Keys.Left)
-                                //{
-                                //    if (ObjectType.player == go.Otype)
-                                //    {
-                                //        goPictureBox.updateImage(moveLeft);
-                                //        keyCode = Keys.Clear;
-                                //    }
-                                //}
-                                //else if (keyCode == Keys.Right)
-                                //{
-                                //    if (ObjectType.player == go.Otype)
-                                //    {
-                                //        goPictureBox.updateImage(moveRigth);
-                                //        keyCode = Keys.Clear;
-                                //    }
-
-                                //}
-
                             }
                         }
                     }
@@ -247,37 +222,37 @@ namespace Framework.Core
        
         private void detectCollsionwithPlayer()
         {
-            for (int x = 0; x < goPictureBoxList.Count; x++)
+            for (int x = 0; x < GoPictureBoxList.Count; x++)
             {
-                for (int y = 0; y < goPictureBoxList.Count; y++)
+                for (int y = 0; y < GoPictureBoxList.Count; y++)
                 {
-                    if (goPictureBoxList[y] != null&& goPictureBoxList[x]!=null)
+                    if (GoPictureBoxList[y].Pbx != null&& GoPictureBoxList[x].Pbx!=null)
                     {
-                        if (goPictureBoxList[x].Pbx.Bounds.IntersectsWith(goPictureBoxList[y].Pbx.Bounds))
+                        if (GoPictureBoxList[x].Pbx.Bounds.IntersectsWith(GoPictureBoxList[y].Pbx.Bounds))
                         {
-                            foreach (CollisionClass c in collisionList)
+                            foreach (CollisionClass c in CollisionList)
                             {
                                 if(c != null)
                                 {
-                                    for (int z = 0; z < goProgressBarList.Count; z++)
+                                    for (int z = 0; z < GoProgressBarList.Count; z++)
                                     {
-                                        if (goProgressBarList[z] != null)
+                                        if (GoProgressBarList[z].Pbar != null)
                                         {
-                                            if (goPictureBoxList[x].Otype == c.G1 && goPictureBoxList[y].Otype == c.G2 && goProgressBarList[z].Otype == c.G1 && goProgressBarList[z].Otype == ObjectType.player)
+                                            if (GoPictureBoxList[x].Otype == c.G1 && GoPictureBoxList[y].Otype == c.G2 && GoProgressBarList[z].Otype == c.G1 && GoProgressBarList[z].Otype == ObjectType.player)
                                             {
-                                                if (goProgressBarList[z].Pbar.Value > 0)
+                                                if (GoProgressBarList[z].Pbar.Value > 0)
                                                 {
-                                                    goProgressBarList[z].Pbar.Value -=reducePlayerHealth;
-                                                    if (goProgressBarList[z].Pbar.Value <= 2)
+                                                    GoProgressBarList[z].Pbar.Value -=reducePlayerHealth;
+                                                    if (GoProgressBarList[z].Pbar.Value <= 2)
                                                     {
                                                         life.Value -= 20;
-                                                        goProgressBarList[z].Pbar.Value = 100;
+                                                        GoProgressBarList[z].Pbar.Value = 100;
                                                     }
                                                 }
                                                 if (life.Value <= 1)
                                                 {
-                                                    c.Behaviour.removePictureBoxObject(this, goPictureBoxList[x], goPictureBoxList[y]);
-                                                    c.Behaviour.removeProgressBarObject(this, goProgressBarList[z]);
+                                                    c.Behaviour.removePictureBoxObject(this, GoPictureBoxList[x], GoPictureBoxList[y]);
+                                                    c.Behaviour.removeProgressBarObject(this, GoProgressBarList[z]);
                                                     nextLevelStatus = NextLevel.lost.ToString();
                                                 }
                                             }
@@ -295,31 +270,40 @@ namespace Framework.Core
 
         private void detectCollsionwithEnemy()
         {
-            for (int x = 0; x < goPictureBoxList.Count; x++)
+            for (int x = 0; x < GoPictureBoxList.Count; x++)
             {
-                for (int y = 0; y < goPictureBoxList.Count; y++)
+                for (int y = 0; y < GoPictureBoxList.Count; y++)
                 {
-                    if (goPictureBoxList[y] != null&& goPictureBoxList[x] != null)
+                    if (GoPictureBoxList[y].Pbx != null&& GoPictureBoxList[x].Pbx != null)
                     {
-                        if (goPictureBoxList[x].Pbx.Bounds.IntersectsWith(goPictureBoxList[y].Pbx.Bounds))
+                        if (GoPictureBoxList[x].Pbx.Bounds.IntersectsWith(GoPictureBoxList[y].Pbx.Bounds))
                         {
-                            foreach (CollisionClass c in collisionList)
+                            foreach (CollisionClass c in CollisionList)
                             {
-                                for (int z = 0; z < goProgressBarList.Count; z++)
+                                for (int z = 0; z < GoProgressBarList.Count; z++)
                                 {
-                                    if(c!=null && goProgressBarList[z] != null)
+                                    if(c!=null && GoProgressBarList[z].Pbar != null)
                                     {
-                                        if (goPictureBoxList[x].Otype == c.G1 && goPictureBoxList[y].Otype == c.G2 && goProgressBarList[z].Otype == c.G1 && (goProgressBarList[z].Otype == ObjectType.enemyIdel || goProgressBarList[z].Otype == ObjectType.enemyRun) && (keyCodeValue == Keys.Z || keyCodeValue == Keys.X))
+                                        if (GoPictureBoxList[x].Otype == c.G1 && GoPictureBoxList[y].Otype == c.G2 && GoProgressBarList[z].Otype == c.G1 && (GoProgressBarList[z].Otype == ObjectType.enemyIdel || GoProgressBarList[z].Otype == ObjectType.enemyRun) && (keyCodeValue == Keys.Z || keyCodeValue == Keys.X))
                                         {
-                                            if (goProgressBarList[z].Pbar.Value > 0)
+                                            if (GoProgressBarList[z].Pbar.Value > 0)
                                             {
-                                                goProgressBarList[z].Pbar.Value -= reduceEnemyHealth;
+                                                GoProgressBarList[z].Pbar.Value -= reduceEnemyHealth;
                                                 Score.updateScore(scoreIncrementValue);
                                             }
-                                            if (goProgressBarList[z].Pbar.Value <= 1)
+                                            if (GoProgressBarList[z].Pbar.Value <= 1)
                                             {
-                                                c.Behaviour.removePictureBoxObject(this, goPictureBoxList[x], goPictureBoxList[y]);
-                                                c.Behaviour.removeProgressBarObject(this, goProgressBarList[z]);
+                                                c.Behaviour.removePictureBoxObject(this, GoPictureBoxList[x], GoPictureBoxList[y]);
+                                                c.Behaviour.removeProgressBarObject(this, GoProgressBarList[z]);
+                                                goPictureBoxList[x].Pbx.Visible = false;
+                                                if (c.G1 == ObjectType.enemyIdel || c.G1 == ObjectType.enemyRun || c.G2 == ObjectType.enemyIdel || c.G2 == ObjectType.enemyRun)
+                                                {
+                                                    if (x > goPictureBoxList.Count)
+                                                    {
+                                                        goPictureBoxList[x].Pbx = null;
+                                                    }
+                                                }
+                                                GoProgressBarList[x].Pbar.Visible = false;
                                                 nextLevelStatus = NextLevel.won.ToString();
                                             }
 
@@ -331,26 +315,42 @@ namespace Framework.Core
                             }
                         }
                     }
-                   
                 }
             }
         }
-
+        private void removeObjects()
+        {
+            for(int i = 0; i < goPictureBoxList.Count; i++)
+            {
+                if (goPictureBoxList[i].Pbx.Visible == false)
+                {
+                    GoPictureBoxList.RemoveAt(i);
+                }
+            }
+            for (int i = 0; i < goProgressBarList.Count; i++)
+            {
+                if (goProgressBarList[i].Pbar.Visible == false)
+                {
+                    goProgressBarList.RemoveAt(i);
+                }
+            }
+        }
         
         public void addCollsionIntoList(CollisionClass c)
         {
-            collisionList.Add(c);
+            CollisionList.Add(c);
         }
         #endregion
 
         #region Firing
         private void detectPlayerFirCollisionwithEnemy()
         {
-            foreach(GoProgressBar health in goProgressBarList)
+            detectPlayerFirCollisionwithEnemy1();
+            foreach (GoProgressBar health in GoProgressBarList)
             {
-                foreach (GoPictureBox enemy in goPictureBoxList)
+                foreach (GoPictureBox enemy in GoPictureBoxList)
                 {
-                    foreach (GoFirePictureBox bullet in goFirePictureBoxeList)
+                    foreach (GoFirePictureBox bullet in GoFirePictureBoxeList)
                     {
                         if (enemy.Otype == ObjectType.enemyIdel || enemy.Otype == ObjectType.enemyRun)
                         {
@@ -373,46 +373,79 @@ namespace Framework.Core
                 }
             }
         }
+        private void detectPlayerFirCollisionwithEnemy1()
+        {
+            foreach (GoPictureBox enemy in GoPictureBoxList)
+            {
+                foreach (GoFirePictureBox bullet in GoFirePictureBoxeList)
+                {
+                    if (enemy.Otype == ObjectType.enemyIdel || enemy.Otype == ObjectType.enemyRun)
+                    {
+                        if (bullet.Pbx.Bounds.IntersectsWith(enemy.Pbx.Bounds))
+                        {
+                            enemy.Pbx.Visible = false;
+                            Score.updateScore(scoreIncrementValue);
+                            enemyDieCount++;
+                            if (wonAt == enemyDieCount)
+                            {
+                                nextLevelStatus = NextLevel.level3.ToString();
+                                gameStatus = false;
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+    
         private void removeEnemy()
         {
-            foreach (GoPictureBox enemy in goPictureBoxList)
+            foreach (GoPictureBox enemy in GoPictureBoxList)
             {
-                if (enemy.Pbx.Visible == false)
+                if (enemy.Pbx != null)
                 {
-                    OnPictureBoxRemoved?.Invoke(enemy.Pbx, EventArgs.Empty);
+                    if (enemy.Pbx.Visible == false)
+                    {
+                        OnPictureBoxRemoved?.Invoke(enemy.Pbx, EventArgs.Empty);
+                    }
                 }
+               
             }
         }
         private void removeEnemyHealth()
         {
-            foreach (GoProgressBar health in goProgressBarList)
+            foreach (GoProgressBar health in GoProgressBarList)
             {
-                if (health.Pbar.Visible == false)
+                if (health.Pbar != null)
                 {
-                    onProgressBarRemoved?.Invoke(health.Pbar, EventArgs.Empty);
+                    if (health.Pbar.Visible == false)
+                    {
+                        onProgressBarRemoved?.Invoke(health.Pbar, EventArgs.Empty);
+                    }
                 }
             }
         }
         private void removeBullet()
         {
-            for (int i = 0; i < goFirePictureBoxeList.Count; i++)
+            for (int i = 0; i < GoFirePictureBoxeList.Count; i++)
             {
-                if (goFirePictureBoxeList[i].Pbx.Right <= 0)
+                if (GoFirePictureBoxeList[i].Pbx.Right <= 0)
                 {//right
                     OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
                     GoFirePictureBoxeList.RemoveAt(i);
                 }
-                else if (goFirePictureBoxeList[i].Pbx.Left <= 0)
+                else if (GoFirePictureBoxeList[i].Pbx.Left <= 0)
                 {//left
                     OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
                     GoFirePictureBoxeList.RemoveAt(i);
                 }
-                else if (goFirePictureBoxeList[i].Pbx.Top <= 0)
+                else if (GoFirePictureBoxeList[i].Pbx.Top <= 0)
                 {//up
                     OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
                     GoFirePictureBoxeList.RemoveAt(i);
                 }
-                else if (goFirePictureBoxeList[i].Pbx.Bottom <= 0)
+                else if (GoFirePictureBoxeList[i].Pbx.Bottom <= 0)
                 {//down
                     OnPictureBoxRemoved?.Invoke(GoFirePictureBoxeList[i].Pbx, EventArgs.Empty);
                     GoFirePictureBoxeList.RemoveAt(i);
@@ -429,18 +462,17 @@ namespace Framework.Core
         }
         private void moveSmartly()
         {
-            for (int x = 0; x < goPictureBoxList.Count; x++)
+            for (int x = 0; x < GoPictureBoxList.Count; x++)
             {
-                for (int y = 0; y < goPictureBoxList.Count; y++)
+                for (int y = 0; y < GoPictureBoxList.Count; y++)
                 {
-                    if (goPictureBoxList[y] != null && goPictureBoxList[x]!=null)
+                    if (GoPictureBoxList[y].Pbx != null && GoPictureBoxList[x].Pbx != null)
                     {
                         foreach (ChasingClass c in chasingList)
                         {
-                            if (goPictureBoxList[x].Otype == c.G1 && goPictureBoxList[y].Otype == c.G2)
+                            if (GoPictureBoxList[x].Otype == c.G1 && GoPictureBoxList[y].Otype == c.G2)
                             {
-                                c.Behaviour.performChasing(this, goPictureBoxList[x], goPictureBoxList[y]);
-
+                                c.Behaviour.performChasing(this, GoPictureBoxList[x], GoPictureBoxList[y]);
                             }
                         }
                        
@@ -455,17 +487,17 @@ namespace Framework.Core
         {
             try
             {
-                for (int i = 0; i < goPictureBoxList.Count; i++)
+                for (int i = 0; i < GoPictureBoxList.Count; i++)
                 {
-                    for (int j = 0; j < goPictureBoxList.Count; j++)
+                    for (int j = 0; j < GoPictureBoxList.Count; j++)
                     {
-                        if (goPictureBoxList[i] != null&&goPictureBoxList[j] != null)
+                        if (GoPictureBoxList[i].Pbx != null&&GoPictureBoxList[j].Pbx != null)
                         {
-                            if (goPictureBoxList[i].Otype == ObjectType.player && goPictureBoxList[j].Otype == ObjectType.energy)
+                            if (GoPictureBoxList[i].Otype == ObjectType.player && GoPictureBoxList[j].Otype == ObjectType.energy)
                             {
-                                if (goPictureBoxList[j].Pbx.Bounds.IntersectsWith(goPictureBoxList[i].Pbx.Bounds))
+                                if (GoPictureBoxList[j].Pbx.Bounds.IntersectsWith(GoPictureBoxList[i].Pbx.Bounds))
                                 {
-                                    goPictureBoxList[j].Pbx.Visible = false;
+                                    GoPictureBoxList[j].Pbx.Visible = false;
                                     if (life.Value <= 80)
                                     {
                                         life.Value += 20;
@@ -485,13 +517,13 @@ namespace Framework.Core
         {
             try
             {
-                for (int x = 0; x < goPictureBoxList.Count; x++)
+                for (int x = 0; x < GoPictureBoxList.Count; x++)
                 {
-                    if (goPictureBoxList[x] != null)
+                    if (GoPictureBoxList[x].Pbx != null)
                     {
-                        if (goPictureBoxList[x].Pbx.Visible == false)
+                        if (GoPictureBoxList[x].Pbx.Visible == false)
                         {
-                            risePlayerDieEvent(goPictureBoxList[x].Pbx);
+                            risePlayerDieEvent(GoPictureBoxList[x].Pbx);
                         }
                     }
                 }

@@ -48,7 +48,10 @@ namespace Framework.Core
         }
         public void updateLocation(int gravity)
         {
-            pbx.Location = movement.move(pbx.Location);
+            if (pbx!=null)
+            {
+                pbx.Location = movement.move(pbx.Location);
+            }
         }
     }
 }

@@ -60,11 +60,11 @@ namespace Consumer
         #region Tick Event
         private int firFixTime = 20;
         private int firTime;
-        int counter;
+        private int ObjCreation;
         private void gameLoop_Tick(object sender, EventArgs e)
         {
             showEnergyPoint();
-            string message =game.update(lblScore, pgbarPlayerLife,5);
+            string message =game.update(lblScore, pgbarPlayerLife,20);
             if (message == NextLevel.won.ToString())
             {
                 if (isLevel1==true)
@@ -84,15 +84,8 @@ namespace Consumer
                 isLevel1 = false;
                 string info = "Game Over";
                 frmEnd end = new frmEnd(info);
-                DialogResult result = end.ShowDialog();
-                if (result == DialogResult.Yes)
-                {
-                    restart();
-                }
-                else
-                {
-                    Close();
-                }
+                end.Show();
+                this.Hide();
             }
             if (message == NextLevel.level3.ToString())
             {
@@ -100,32 +93,23 @@ namespace Consumer
                 isLevel3 = false;
                 string info = "You Won";
                 frmEnd end = new frmEnd(info);
-                DialogResult result = end.ShowDialog();
-                if (result == DialogResult.Yes)
-                {
-                    restart();
-                }
-                else
-                {
-                    Close();
-                }
+                end.Show();
+                this.Hide();
             }
-            counter = random.Next(1, 500);
             if (isLevel3 == true)
             {
-                if (250 == counter)
+                firTime++;
+                ObjCreation++;
+                if (firFixTime == ObjCreation)
                 {
-                    counter = 0;
-                    level3ObjectsNormal();
+                    if (game.GoPictureBoxList.Count < 3)
+                    {
+                        level3ObjectsNormal();
+                    }
+                    ObjCreation = 0;
 
                 }
-                else if (100 == counter)
-                {
-                    counter = 0;
-                    level3ObjectSmart();
-                }
-                firTime++;
-                level3InLoop();
+                level3Firing();
             }
 
         }
@@ -284,13 +268,15 @@ namespace Consumer
             ////Boundary of the form
             Point boundary = new Point(this.Width - 75, this.Height);
             //Adding game object Picture Box
-            game.addGameObjectPictureBox(ObjectType.player, Consumer.Properties.Resources.idle, random.Next(100, 300), random.Next(100, 400), new Keyboard(20, boundary, 100));
+            Keyboard keyboard = new Keyboard(20, boundary, 100);
+            game.addGameObjectPictureBox(ObjectType.player, Consumer.Properties.Resources.idle, random.Next(100, 300), random.Next(100, 400), keyboard); 
             game.addGameObjectPictureBox(ObjectType.enemyIdel, Consumer.Properties.Resources.enemyIdel, random.Next(100, 300), random.Next(100, 400), new Horizontal(0, boundary, "right", 100));
             ////Adding game object Progress Bar
             game.addGameObjectProgressBar(ObjectType.player, 100, 40, 15, 0, 80);
             game.addGameObjectProgressBar(ObjectType.enemyIdel, 100, 40, 15, 0, 80);
             ////Chasing The player
-            ChasingClass chass = new ChasingClass(ObjectType.player, ObjectType.enemyIdel, new SmartChasing(3));
+            SmartChasing smartChasing = new SmartChasing(3);
+            ChasingClass chass = new ChasingClass(ObjectType.player, ObjectType.enemyIdel, smartChasing);
             game.addChasingIntoList(chass);
             ////Adding collision
             CollisionClass playerCollisionWithEnemy = new CollisionClass(ObjectType.player, ObjectType.enemyIdel, new PLayerCollision());
@@ -349,7 +335,7 @@ namespace Consumer
             game.addGameObjectProgressBar(ObjectType.player, 100, 40, 15, 0, 80);
             level3ObjectsNormal();
         }
-        public void level3InLoop()
+        public void level3Firing()
         {
             if (firTime == firFixTime)
             {
@@ -373,7 +359,6 @@ namespace Consumer
                     game.addGameObjectPictureBoxFire(Consumer.Properties.Resources.laserPlayerDown, "down", 10, ObjectType.player, 10, 40);
                     keyPressed = Keys.None;
                 }
-                // clearDieObject();
                 firTime = 0;
             }
         }
@@ -388,7 +373,6 @@ namespace Consumer
             game.addGameObjectPictureBox(ObjectType.enemyIdel, Consumer.Properties.Resources.enemyIdel, random.Next(100, 300), random.Next(100, 400), new Horizontal(0, boundary, "right", 100));
             game.addGameObjectPictureBox(ObjectType.enemyRun, Consumer.Properties.Resources.enemyRunLeft, random.Next(100, 300), random.Next(100, 400), new Horizontal(0, boundary, "right", 100));
             ////Adding game object Progress Bar
-           
             game.addGameObjectProgressBar(ObjectType.enemyIdel, 100, 40, 15, 0, 80);
             game.addGameObjectProgressBar(ObjectType.enemyRun, 100, 40, 15, 0, 80);
             ////Chasing The player

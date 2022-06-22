@@ -29,9 +29,11 @@ namespace Framework.Core
 
         public void updateLocation(int left,int top)
         {
-            Pbar.Left = left;
-            Pbar.Top = top;
-
+            if (pbar != null)
+            {
+                Pbar.Left = left;
+                Pbar.Top = top;
+            }
         }
     }
 }

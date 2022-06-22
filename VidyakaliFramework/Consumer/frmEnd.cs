@@ -28,7 +28,9 @@ namespace Consumer
         {
             try
             {
-                this.DialogResult = DialogResult.Yes;
+                frmMain main = new frmMain();
+                main.Show();
+                this.Hide();
             }
             catch (Exception ex)
             {
@@ -40,7 +42,7 @@ namespace Consumer
         {
             try
             {
-                this.DialogResult = DialogResult.No;
+                Application.Exit();
             }
             catch (Exception ex)
             {
