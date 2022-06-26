@@ -22,6 +22,49 @@ Food: to boost the player's energy.
 •	As the health of the enemy is zero the enemy will die and the new enemy will generate depending upon level number.
 
 •	In third level you cannot boost health game will puse.
+## 	Goal of the Game
+The main objective behind this game is very simple. The user can utilize their time while playing this game and don't spend time in the bad company of society. The vidyakali and enemy help the player to fight with the external enemy of the society in a good way and take power from it. This three-level is the spirit of our religion stop the evil with the hand, tongue, and dislike it in the heart.
+## Features of Framework
+Following are the features of the framework.
+ •	Movement
+ 
+     o	Keyboard
+     
+     o	Horizontal
+     
+     o	Chasing
+     
+•	Firing
+
+    Proper firing system of the player towards the enemy.
+
+•	 Collision
+
+    o	Energy Point
+
+    o	Enemy 
+
+    o	Player
+
+
+•	Health System
+
+    o	Player
+
+    o	Enemy
+
+•	Score
+
+    Increase the game score according to the set value of the user.
+
+
+• Extendibility
+
+    Ability of extent all these according to the new user’s requirement.
+
+
+
+
 
 
 
