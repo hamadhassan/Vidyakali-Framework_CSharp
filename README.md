@@ -62,6 +62,10 @@ Following are the features of the framework.
 
     Ability of extent all these according to the new user’s requirement.
 
+## Class diagram
+
+![Movement](https://user-images.githubusercontent.com/96945594/175982386-ab0882f6-5f88-4c3e-a701-b761c1725b23.jpg)
+![Score](https://user-images.githubusercontent.com/96945594/175982378-f8c0c344-d0fd-4718-9cbe-b8d8d12bb6bb.jpg)
 
 
 
