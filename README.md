@@ -66,6 +66,8 @@ Following are the features of the framework.
 
 ![Movement](https://user-images.githubusercontent.com/96945594/175982386-ab0882f6-5f88-4c3e-a701-b761c1725b23.jpg)
 ![Score](https://user-images.githubusercontent.com/96945594/175982378-f8c0c344-d0fd-4718-9cbe-b8d8d12bb6bb.jpg)
+![Core](https://user-images.githubusercontent.com/96945594/175982511-cafbf0d5-e492-4810-acfb-cf9f13f70cf1.jpg)
+![Collsion](https://user-images.githubusercontent.com/96945594/175982581-797fd9c4-961c-4e31-9689-6b4fcef1e211.jpg)
 
 
 
