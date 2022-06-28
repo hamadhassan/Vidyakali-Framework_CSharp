@@ -69,8 +69,12 @@ Following are the features of the framework.
 ![Core](https://user-images.githubusercontent.com/96945594/175982511-cafbf0d5-e492-4810-acfb-cf9f13f70cf1.jpg)
 ![Collsion](https://user-images.githubusercontent.com/96945594/175982581-797fd9c4-961c-4e31-9689-6b4fcef1e211.jpg)
 
+## 	Framework Implementation
+The Vidyakali framework is easy to implement
+    You need to add the Dynamic-link library(DLL) file in your C# Window form references.
 
+    o	Right-click on the references
 
+    o	Left-click on the add references
 
-
-
+    o	In the assembblies>Framework>Framework select the  file
