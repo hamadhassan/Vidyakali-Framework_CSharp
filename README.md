@@ -78,3 +78,6 @@ The Vidyakali framework is easy to implement
     o	Left-click on the add references
 
     o	In the assembblies>Framework>Framework select the  file
+Initialization of the game using following parameterize 
+
+    Game(int gravity,int reducePlayerHealth,int reduceEnemyHealth,float scoreIncrementValue,bool gameStatus)
